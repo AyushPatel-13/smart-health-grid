@@ -11,7 +11,12 @@
     "test": "vitest run",
     "db:reset": "tsx scripts/db.ts reset",
     "db:summary": "tsx scripts/db.ts summary",
-    "db:seed:supabase": "tsx scripts/db.ts seed:supabase"
+    "db:seed:supabase": "tsx scripts/db.ts seed:supabase",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/allocation-db.test.ts tests/distribution.test.ts tests/workforce.test.ts",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "validate": "npm run lint && npm run typecheck && npm run test:coverage && npm run build"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.10",
@@ -33,6 +38,7 @@
     "@types/node": "^24.19.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^5.0.5",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
     "tailwindcss": "^4",

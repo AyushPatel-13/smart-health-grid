@@ -135,7 +135,9 @@ export default async function AllocationPage({ searchParams }: PageProps<"/alloc
                 <Th align="right">{t("allocation.firstChoice")}</Th>
                 <Th align="right">{t("allocation.attempts")}</Th>
                 <Th>{t("allocation.triggeredBy")}</Th>
-                <Th />
+                <Th>
+                  <span className="sr-only">{t("common.actions")}</span>
+                </Th>
               </tr>
             </thead>
             <tbody>

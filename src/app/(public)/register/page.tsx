@@ -40,7 +40,7 @@ export default async function RegisterPage() {
       <PageHeader title={t("patient.registerTitle")} subtitle={t("patient.registerSubtitle")} />
       {staff && (
         <Notice tone="info" className="mb-4">
-          {t("patient.assisted")} ({staff.fullName})
+          {t("patient.assisted")}
         </Notice>
       )}
       <RegisterForm

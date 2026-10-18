@@ -48,18 +48,21 @@ export function ConnectivityBar() {
       update();
       void sync();
     };
-    update();
-    refresh();
+    const init = setTimeout(() => {
+      update();
+      refresh();
+      void sync();
+    }, 0);
     window.addEventListener("online", goOnline);
     window.addEventListener("offline", update);
     window.addEventListener(QUEUE_EVENT, refresh);
     const id = setInterval(() => navigator.onLine && void sync(), 30_000);
-    void sync();
     return () => {
       window.removeEventListener("online", goOnline);
       window.removeEventListener("offline", update);
       window.removeEventListener(QUEUE_EVENT, refresh);
       clearInterval(id);
+      clearTimeout(init);
     };
   }, [refresh, sync]);
 

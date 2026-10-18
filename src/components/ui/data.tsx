@@ -55,7 +55,7 @@ export function KpiCard({
 // ---------------------------------------------------------------------------
 export function Table({ children, caption, className }: { children: ReactNode; caption?: string; className?: string }) {
   return (
-    <div className={cn("w-full overflow-x-auto", className)}>
+    <div className={cn("w-full overflow-x-auto", className)} tabIndex={0} role={caption ? "region" : undefined} aria-label={caption}>
       <table className="w-full min-w-[640px] border-collapse text-left text-sm">
         {caption && <caption className="sr-only">{caption}</caption>}
         {children}

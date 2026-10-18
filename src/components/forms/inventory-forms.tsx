@@ -5,6 +5,8 @@ import { addBatchAction, adjustmentAction, issueAction, receiptAction, writeOffA
 import { Field, FormStatus, SubmitButton, inputClass, textareaClass, useActionForm } from "@/components/ui/form";
 import { cn } from "@/components/ui/primitives";
 import { useI18n } from "@/lib/i18n/client";
+import { enqueue, isNetworkError } from "@/lib/offline/queue";
+import type { z } from "zod";
 import { BATCH_SOURCES, addBatchSchema, adjustmentSchema, issueSchema, receiptSchema, writeOffSchema } from "@/lib/validation/schemas";
 
 export interface MedicineOption {
@@ -67,7 +69,18 @@ export function InventoryForms({ facilityId, medicines, batches }: { facilityId:
 function IssueForm({ facilityId, medicines }: { facilityId: string; medicines: MedicineOption[] }) {
   const { t } = useI18n();
   const [key, setKey] = useState(newKey);
-  const { form, onSubmit, pending, status } = useActionForm(issueSchema, issueAction, {
+  // Offline: queue the issue with its idempotency key; the server applies it once
+  // on sync and rejects it (for review) if stock is no longer sufficient.
+  const issueWithOffline = async (v: z.infer<typeof issueSchema>) => {
+    try {
+      return await issueAction(v);
+    } catch (err) {
+      if (!isNetworkError(err)) throw err;
+      enqueue("issue", v);
+      return { ok: true as const, message: "offline.savedOffline" };
+    }
+  };
+  const { form, onSubmit, pending, status } = useActionForm(issueSchema, issueWithOffline, {
     defaultValues: { facilityId, idempotencyKey: key, medicineId: "", reason: "" },
     onSuccess: () => {
       const k = newKey();

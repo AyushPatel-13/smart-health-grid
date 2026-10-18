@@ -119,7 +119,7 @@ export default async function TwinPage({ searchParams }: PageProps<"/twin">) {
           <Card className="xl:col-span-2">
             <CardHeader title={t(`twin.layers.${layer}`)} subtitle={t("twin.mapNote")} />
             <CardBody>
-              <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full rounded-lg bg-[#f2f6fb]" role="img" aria-label={t("twin.title")}>
+              <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full rounded-lg bg-[#f2f6fb]" role="group" aria-label={t("twin.title")}>
                 <defs>
                   <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
                     <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e2e8f0" strokeWidth="1" />
@@ -138,7 +138,7 @@ export default async function TwinPage({ searchParams }: PageProps<"/twin">) {
                       {warn && <circle cx={p.x} cy={p.y} r={r + 7} fill="none" stroke={warn.level === "overload" ? "#dc2626" : "#f59e0b"} strokeWidth="2.5" strokeDasharray="5 3" />}
                       <circle cx={p.x} cy={p.y} r={r} fill={COLOR[lv.level]} fillOpacity={0.85} stroke={isSel ? "#0b1f3a" : "#fff"} strokeWidth={isSel ? 3 : 2} />
                       {s.facility.facility_type === "CHC" && <circle cx={p.x} cy={p.y} r={r - 4} fill="none" stroke="#fff" strokeWidth="1.5" />}
-                      <text x={p.x} y={p.y + 4} textAnchor="middle" fontSize="11" fontWeight="700" fill="#fff">
+                      <text x={p.x} y={p.y + 4} textAnchor="middle" fontSize="11" fontWeight="700" fill={lv.level === "critical" ? "#fff" : "#0f1b2d"}>
                         {lv.value}
                       </text>
                       <text x={p.x} y={p.y + r + 14} textAnchor="middle" fontSize="11" fill="#0f1b2d">

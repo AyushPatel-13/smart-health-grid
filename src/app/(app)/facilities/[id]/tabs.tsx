@@ -511,7 +511,11 @@ export async function BedsTab({ s, canWrite, t, locale }: TabCtx) {
                 <Th align="right">{t("beds.available")}</Th>
                 <Th>{t("beds.utilization")}</Th>
                 <Th>{t("beds.verifiedAt")}</Th>
-                {canWrite && <Th />}
+                {canWrite && (
+                  <Th>
+                    <span className="sr-only">{t("common.actions")}</span>
+                  </Th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -738,7 +742,11 @@ export async function DiagnosticsTab({ s, canWrite, t, locale }: TabCtx) {
             <Th>{t("common.details")}</Th>
             <Th>{t("diagnostics.restoration")}</Th>
             <Th>{t("diagnostics.lastVerified")}</Th>
-            {canWrite && <Th />}
+            {canWrite && (
+              <Th>
+                <span className="sr-only">{t("common.actions")}</span>
+              </Th>
+            )}
           </tr>
         </thead>
         <tbody>

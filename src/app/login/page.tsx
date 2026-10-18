@@ -16,18 +16,18 @@ export default async function LoginPage() {
   return (
     <div className="flex min-h-screen flex-col bg-canvas">
       {demo && (
-        <div className="bg-amber-100 px-4 py-1.5 text-center text-[12px] font-medium text-amber-900" role="note">
+        <div className="bg-amber-100 px-4 py-1.5 text-center text-[12px] font-medium text-amber-900" role="region" aria-label={t("demo.badge")}>
           {t("demo.banner")}
         </div>
       )}
-      <div className="flex flex-1 items-center justify-center px-4 py-10">
+      <main id="main" className="flex flex-1 items-center justify-center px-4 py-10">
         <div className="grid w-full max-w-4xl gap-6 md:grid-cols-[1.1fr_1fr]">
           <div className="hidden flex-col justify-between rounded-2xl bg-navy-900 p-8 text-white md:flex">
             <div>
               <span className="grid size-10 place-items-center rounded-xl bg-teal-600">
                 <HeartPulse className="size-6" aria-hidden />
               </span>
-              <h1 className="mt-6 text-2xl font-semibold">{t("app.name")}</h1>
+              <p className="mt-6 text-2xl font-semibold">{t("app.name")}</p>
               <p className="mt-2 text-sm text-slate-300">{t("app.tagline")}</p>
             </div>
             <ul className="mt-8 space-y-2 text-sm text-slate-300">
@@ -41,7 +41,7 @@ export default async function LoginPage() {
               <HeartPulse className="size-6 text-teal-600" aria-hidden />
               <span className="font-semibold">{t("app.name")}</span>
             </div>
-            <h2 className="text-xl font-semibold">{t("login.title")}</h2>
+            <h1 className="text-xl font-semibold">{t("login.title")}</h1>
             <p className="mt-1 text-sm text-ink-muted">{demo ? t("login.subtitle") : t("login.supabaseHint")}</p>
             <LoginForm
               demoAccounts={demo ? DEMO_ACCOUNTS.map((a) => ({ email: a.email, fullName: a.fullName, role: a.role })) : []}
@@ -49,7 +49,7 @@ export default async function LoginPage() {
             />
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

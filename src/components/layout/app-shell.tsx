@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, useTransition, type ReactNode } from "react";
+import { useEffect, useRef, useState, useTransition, type ReactNode } from "react";
 import {
   Activity,
   ArrowLeftRight,
@@ -141,6 +141,19 @@ export function AppShell({
 }) {
   const { t, locale } = useI18n();
   const [open, setOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    closeButton.current?.focus();
+    const trigger = menuButton.current;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      trigger?.focus();
+    };
+  }, [open]);
   const scope = user.facilityName
     ? locale === "hi" && user.facilityNameHi ? user.facilityNameHi : user.facilityName
     : user.districtName
@@ -182,7 +195,7 @@ export function AppShell({
           <button type="button" className="absolute inset-0 bg-navy-950/50" onClick={() => setOpen(false)} aria-label={t("nav.closeMenu")} />
           <div className="relative h-full w-64 max-w-[80%] shadow-xl">
             {sidebar(() => setOpen(false))}
-            <button type="button" onClick={() => setOpen(false)} className="absolute right-2 top-3 rounded-md p-1.5 text-slate-300 hover:bg-white/10" aria-label={t("nav.closeMenu")}>
+            <button ref={closeButton} type="button" onClick={() => setOpen(false)} className="absolute right-2 top-3 rounded-md p-1.5 text-slate-300 hover:bg-white/10" aria-label={t("nav.closeMenu")}>
               <X className="size-5" aria-hidden />
             </button>
           </div>
@@ -191,12 +204,12 @@ export function AppShell({
 
       <div className="flex min-w-0 flex-1 flex-col">
         {demoMode && (
-          <div className="no-print bg-amber-100 px-4 py-1.5 text-center text-[12px] font-medium text-amber-900" role="note">
+          <div className="no-print bg-amber-100 px-4 py-1.5 text-center text-[12px] font-medium text-amber-900" role="region" aria-label={t("demo.badge")}>
             {t("demo.banner")}
           </div>
         )}
         <header className="no-print sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-line bg-white/95 px-4 backdrop-blur sm:px-6">
-          <button type="button" onClick={() => setOpen(true)} className="rounded-md p-1.5 text-ink-muted hover:bg-slate-100 lg:hidden" aria-label={t("nav.openMenu")} aria-expanded={open}>
+          <button ref={menuButton} type="button" onClick={() => setOpen(true)} className="rounded-md p-1.5 text-ink-muted hover:bg-slate-100 lg:hidden" aria-label={t("nav.openMenu")} aria-expanded={open}>
             <Menu className="size-5" aria-hidden />
           </button>
           <div className="flex min-w-0 items-center gap-2 lg:hidden">

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
 import { AlertOctagon, CheckCircle2, Crosshair, MapPin } from "lucide-react";
 import { recommendAction, registerAction } from "@/app/actions/patients";
+import { enqueue, isNetworkError } from "@/lib/offline/queue";
 import { Field, inputClass } from "@/components/ui/form";
 import { Badge, Card, CardBody, CardHeader, Notice, buttonClass, cn } from "@/components/ui/primitives";
 import type { FacilityRecommendation } from "@/lib/allocation/recommend";
@@ -34,6 +35,7 @@ export function RegisterForm({ services, dates, times, localities, cutoffIso }: 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [result, setResult] = useState<Result | null>(null);
+  const [savedOffline, setSavedOffline] = useState(false);
   const [pending, start] = useTransition();
   const [key] = useState(() => (typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`));
 
@@ -73,7 +75,7 @@ export function RegisterForm({ services, dates, times, localities, cutoffIso }: 
       return;
     }
     start(async () => {
-      const res = await registerAction({
+      const payload = {
         fullName: details.fullName,
         birthYear: details.birthYear ? Number(details.birthYear) : null,
         sex: details.sex,
@@ -91,7 +93,17 @@ export function RegisterForm({ services, dates, times, localities, cutoffIso }: 
         time: emergency ? "00:00" : time,
         preferredFacilityId: preferred || null,
         idempotencyKey: key,
-      });
+      };
+      let res;
+      try {
+        res = await registerAction(payload);
+      } catch (err) {
+        if (!isNetworkError(err)) throw err;
+        // Offline: keep the submission (same idempotency key) and sync later — never duplicated.
+        enqueue("register", payload);
+        setSavedOffline(true);
+        return;
+      }
       if (res.ok && res.data) setResult(res.data);
       else if (!res.ok) {
         setErrors(res.fieldErrors ?? {});
@@ -99,6 +111,17 @@ export function RegisterForm({ services, dates, times, localities, cutoffIso }: 
       }
     });
   };
+
+  if (savedOffline) {
+    return (
+      <Card>
+        <CardBody className="space-y-3">
+          <Notice tone="warning">{t("offline.savedOffline")}</Notice>
+          <p className="text-[13px] text-ink-muted">{t("offline.registerLater")}</p>
+        </CardBody>
+      </Card>
+    );
+  }
 
   if (result) {
     return (

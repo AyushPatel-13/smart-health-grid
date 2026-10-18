@@ -232,7 +232,7 @@ export default async function WorkforcePage() {
         </Card>
         <Card>
           <CardHeader title={t("workforce.directory")} />
-          <div className="max-h-[420px] overflow-y-auto">
+          <div className="max-h-[420px] overflow-y-auto" tabIndex={0} role="region" aria-label={t("workforce.directory")}>
             <Table>
               <thead>
                 <tr>

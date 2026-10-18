@@ -162,7 +162,6 @@ export async function overloadWarnings(q: Queryable, snaps: FacilitySnapshot[], 
     ),
     redeploymentRecommendations(q, snaps, today),
   ]);
-  const fac = new Map(snaps.map((s) => [s.facility.id, s.facility]));
   const loadOf = (fid: string, date: string) => loads.find((l) => l.facilityId === fid && l.date === date);
   const out: OverloadWarning[] = [];
 

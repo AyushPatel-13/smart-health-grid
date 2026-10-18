@@ -64,7 +64,9 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
                 <Th align="right">{t("facility.capacity")}</Th>
                 <Th align="right">{t("facility.opdCapacity")}</Th>
                 <Th>{t("common.status")}</Th>
-                <Th />
+                <Th>
+                  <span className="sr-only">{t("common.actions")}</span>
+                </Th>
               </tr>
             </thead>
             <tbody>
@@ -116,7 +118,9 @@ export default async function AdminPage({ searchParams }: PageProps<"/admin">) {
                 <Th>{t("admin.role")}</Th>
                 <Th>{t("admin.assignedFacility")}</Th>
                 <Th>{t("common.status")}</Th>
-                <Th />
+                <Th>
+                  <span className="sr-only">{t("common.actions")}</span>
+                </Th>
               </tr>
             </thead>
             <tbody>

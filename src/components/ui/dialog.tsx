@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useId, useRef, type ReactNode } from "react";
 import { X } from "lucide-react";
 import { useI18n } from "@/lib/i18n/client";
 import { buttonClass, cn } from "./primitives";
@@ -20,6 +20,7 @@ export function Dialog({
   wide?: boolean;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
   const { t } = useI18n();
   useEffect(() => {
     const el = ref.current;
@@ -33,7 +34,7 @@ export function Dialog({
       ref={ref}
       onClose={onClose}
       onCancel={onClose}
-      aria-labelledby="dialog-title"
+      aria-labelledby={titleId}
       className={cn(
         "m-auto w-[calc(100%-2rem)] rounded-xl border border-line bg-surface p-0 text-ink shadow-xl",
         wide ? "max-w-2xl" : "max-w-md",
@@ -42,7 +43,7 @@ export function Dialog({
       {open && (
         <div className="flex max-h-[85vh] flex-col">
           <div className="flex items-center justify-between border-b border-line px-5 py-3">
-            <h2 id="dialog-title" className="text-base font-semibold">
+            <h2 id={titleId} className="text-base font-semibold">
               {title}
             </h2>
             <button type="button" onClick={onClose} className="rounded-md p-1 text-ink-muted hover:bg-slate-100" aria-label={t("common.close")}>

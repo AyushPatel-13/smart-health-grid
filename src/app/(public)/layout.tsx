@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { HeartPulse } from "lucide-react";
 import { LanguageSwitch } from "@/components/layout/app-shell";
+import { ConnectivityBar, ServiceWorkerRegistrar } from "@/components/offline/connectivity";
 import { isDemoMode } from "@/lib/env";
 import { getI18n } from "@/lib/i18n/server";
 
@@ -9,13 +10,13 @@ export default async function PublicLayout({ children }: LayoutProps<"/">) {
   return (
     <div className="flex min-h-screen flex-col bg-canvas">
       {isDemoMode() && (
-        <div className="bg-amber-100 px-4 py-1.5 text-center text-[12px] font-medium text-amber-900" role="note">
+        <div className="bg-amber-100 px-4 py-1.5 text-center text-[12px] font-medium text-amber-900" role="region" aria-label={t("demo.badge")}>
           {t("demo.banner")}
         </div>
       )}
       <header className="border-b border-line bg-white">
         <div className="mx-auto flex h-14 max-w-4xl items-center gap-3 px-4">
-          <Link href="/register" className="flex items-center gap-2">
+          <Link href="/register" prefetch={false} className="flex items-center gap-2">
             <span className="grid size-8 place-items-center rounded-lg bg-teal-600 text-white">
               <HeartPulse className="size-5" aria-hidden />
             </span>
@@ -32,6 +33,8 @@ export default async function PublicLayout({ children }: LayoutProps<"/">) {
           </nav>
         </div>
       </header>
+      <ServiceWorkerRegistrar />
+      <ConnectivityBar />
       <main id="main" className="mx-auto w-full max-w-4xl flex-1 px-4 py-6">
         {children}
       </main>

@@ -289,7 +289,11 @@ export default async function DistributionPage() {
                   <Th>{t("distribution.lenderBorrower")}</Th>
                   <Th align="right">{t("distribution.restored")}</Th>
                   <Th>{t("common.status")}</Th>
-                  {admin && <Th />}
+                  {admin && (
+                    <Th>
+                      <span className="sr-only">{t("common.actions")}</span>
+                    </Th>
+                  )}
                 </tr>
               </thead>
               <tbody>

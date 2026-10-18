@@ -7,6 +7,7 @@ import { useActionRunner } from "@/components/ui/form";
 import { buttonClass, cn } from "@/components/ui/primitives";
 import { useI18n } from "@/lib/i18n/client";
 import { inputClass } from "@/components/ui/form";
+import { enqueue, isNetworkError } from "@/lib/offline/queue";
 
 function Status({ status }: { status: { tone: string; text: string } | null }) {
   if (!status) return null;
@@ -47,7 +48,19 @@ export function WalkInForm({ facilityId }: { facilityId: string }) {
       className="flex flex-wrap items-end gap-2"
       onSubmit={(e) => {
         e.preventDefault();
-        run(() => checkInAction({ facilityId, patientCode: code, appointmentId: null }), (r) => r.ok && setCode(""));
+        const payload = { facilityId, patientCode: code, appointmentId: null };
+        run(
+          async () => {
+            try {
+              return await checkInAction(payload);
+            } catch (err) {
+              if (!isNetworkError(err)) throw err;
+              enqueue("checkin", payload); // one check-in per patient/day is enforced on sync
+              return { ok: true as const, message: "offline.savedOffline" };
+            }
+          },
+          (r) => r.ok && setCode(""),
+        );
       }}
     >
       <label className="flex min-w-[200px] flex-1 flex-col gap-1 text-[13px] font-medium">
