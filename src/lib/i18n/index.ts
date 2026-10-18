@@ -9,7 +9,7 @@ type Paths<T, P extends string = ""> = {
   [K in keyof T & string]: T[K] extends string ? `${P}${K}` : Paths<T[K], `${P}${K}.`>;
 }[keyof T & string];
 
-export type TKey = Paths<typeof en>;
+export type TKey = string;
 export type TParams = Record<string, string | number | null | undefined>;
 export type TFunction = (key: TKey, params?: TParams) => string;
 /** Untyped variant for keys computed at runtime (e.g. from analytics reasons). */
