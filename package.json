@@ -6,21 +6,41 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "db:reset": "tsx scripts/db.ts reset",
+    "db:summary": "tsx scripts/db.ts summary",
+    "db:seed:supabase": "tsx scripts/db.ts seed:supabase"
   },
   "dependencies": {
+    "@electric-sql/pglite": "^0.5.10",
+    "@hookform/resolvers": "^5.9.2",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.118.0",
+    "lucide-react": "^1.59.0",
     "next": "16.4.2",
+    "postgres": "^3.4.9",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "react-hook-form": "^7.90.0",
+    "recharts": "^3.10.1",
+    "server-only": "^0.0.1",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
-    "@types/node": "^20",
+    "@types/node": "^24.19.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "vitest": "^5.0.5"
+  },
+  "engines": {
+    "node": ">=20.9"
   }
 }

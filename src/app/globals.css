@@ -1,26 +1,81 @@
 @import "tailwindcss";
 
+/* Smart Health Grid design tokens — navy/blue primary, restrained teal accent,
+   light readable surfaces, strong text contrast (WCAG AA on all pairs). */
+@theme {
+  --color-navy-950: #071426;
+  --color-navy-900: #0b1f3a;
+  --color-navy-800: #12305a;
+  --color-navy-700: #1a3f73;
+  --color-brand-50: #eff5ff;
+  --color-brand-100: #dbe8fe;
+  --color-brand-200: #bcd4fd;
+  --color-brand-500: #2f6fea;
+  --color-brand-600: #1d55d3;
+  --color-brand-700: #1844ab;
+  --color-brand-800: #193b8a;
+  --color-teal-50: #effcf9;
+  --color-teal-100: #c9f5ec;
+  --color-teal-600: #0e8577;
+  --color-teal-700: #0f6b61;
+  --color-surface: #ffffff;
+  --color-canvas: #f4f6fa;
+  --color-line: #dfe5ee;
+  --color-ink: #0f1b2d;
+  --color-ink-muted: #4a5a70;
+  --color-ink-faint: #6b7a90;
+
+  --font-sans: "Segoe UI", "Noto Sans", "Nirmala UI", "Noto Sans Devanagari", system-ui, -apple-system, Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "Segoe UI Mono", Consolas, monospace;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Visible focus for keyboard users everywhere */
+:focus-visible {
+  outline: 2px solid var(--color-brand-600);
+  outline-offset: 2px;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Native dialog backdrop */
+dialog::backdrop {
+  background: rgb(7 20 38 / 0.45);
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  main {
+    padding: 0 !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
 }
